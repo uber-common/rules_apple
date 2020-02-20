@@ -41,12 +41,14 @@ def _archive(
         predeclared_outputs):
     """Returns a file reference for this target's archive."""
     bundle_name_with_extension = bundle_name + bundle_extension
-
     tree_artifact_enabled = is_experimental_tree_artifact_enabled(
         config_vars = platform_prerequisites.config_vars,
     )
     if tree_artifact_enabled:
-        return actions.declare_directory(bundle_name_with_extension)
+        archive_relative_path = "Payload"
+        root_path = bundle_name + "_archive-root"
+        return actions.declare_directory(
+            paths.join(root_path, archive_relative_path, bundle_name_with_extension))
     return predeclared_outputs.archive
 
 def _archive_for_embedding(
