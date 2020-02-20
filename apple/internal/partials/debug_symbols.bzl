@@ -99,7 +99,7 @@ def _bundle_dsym_files(ctx, debug_provider, bundle_name, bundle_extension = ""):
       outputs from the target.
     """
     bundle_name_with_extension = bundle_name + bundle_extension
-    dsym_bundle_name = bundle_name_with_extension + ".dSYM"
+    dsym_bundle_name = paths.join(ctx.attr.name + "_dsyms", bundle_name_with_extension + ".dSYM")
 
     outputs = []
 
