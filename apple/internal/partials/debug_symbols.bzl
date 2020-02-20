@@ -167,7 +167,8 @@ def _bundle_dsym_files(
         dsym_binaries = {},
         dsym_info_plist_template,
         dsym_output_filename,
-        platform_prerequisites):
+        platform_prerequisites,
+        rule_label):
     """Recreates the .dSYM bundle from the AppleDebugOutputs provider and dSYM binaries.
 
     The generated bundle will have the same name as the bundle being built (including its
@@ -194,8 +195,8 @@ def _bundle_dsym_files(
       should be returned as additional outputs from the target, and the second argument is a tree
       artifact representation of a .dSYM bundle with the binaries lipoed together as one binary.
     """
-    dsym_bundle_name_with_extension = debug_output_filename + bundle_extension
-    dsym_bundle_name = dsym_bundle_name_with_extension + ".dSYM"
+    bundle_name_with_extension = bundle_name + bundle_extension
+    dsym_bundle_name = paths.join(rule_label.name + "_dsyms", bundle_name_with_extension + ".dSYM")
 
     output_files = []
     dsym_bundle_dir = None
@@ -307,6 +308,7 @@ def _debug_symbols_partial_impl(
                 dsym_info_plist_template = dsym_info_plist_template,
                 dsym_output_filename = dsym_output_filename,
                 platform_prerequisites = platform_prerequisites,
+                rule_label = rule_label,
             )
             if dsym_bundle_dir:
                 direct_dsym_bundles.append(dsym_bundle_dir)
