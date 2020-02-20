@@ -60,7 +60,7 @@ chmod -R u+w .
 # We rely on `zip` instead of macOS `ditto` because this allows the action to
 # run both on Linux and macOS instances.
 #
-TZ=UTC find . -depth -exec touch -h -t 198001010000 {} \+
+TZ=UTC find . -depth -exec touch -h -t 200001010000 {} \+
 # Avoid zip -r and feed the things in to zip in a deterministic order (not
 # directory order) to ensure a stable result.
 #
