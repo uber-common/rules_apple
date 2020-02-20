@@ -82,7 +82,8 @@ def _bundle_dsym_files(
         debug_outputs_provider,
         dsym_info_plist_template,
         executable_name,
-        platform_prerequisites):
+        platform_prerequisites,
+        rule_label):
     """Recreates the .dSYM bundle from the AppleDebugOutputs provider.
 
     The generated bundle will have the same name as the bundle being built (including its
@@ -106,7 +107,7 @@ def _bundle_dsym_files(
       outputs from the target.
     """
     bundle_name_with_extension = bundle_name + bundle_extension
-    dsym_bundle_name = bundle_name_with_extension + ".dSYM"
+    dsym_bundle_name = paths.join(rule_label.name + "_dsyms", bundle_name_with_extension + ".dSYM")
 
     output_binary = actions.declare_file(
         "%s/Contents/Resources/DWARF/%s" % (
@@ -225,6 +226,7 @@ def _debug_symbols_partial_impl(
                 dsym_info_plist_template = dsym_info_plist_template,
                 executable_name = executable_name,
                 platform_prerequisites = platform_prerequisites,
+                rule_label = rule_label,
             )
             direct_dsyms.extend(dsym_files)
 
