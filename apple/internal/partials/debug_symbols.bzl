@@ -94,6 +94,7 @@ def _collect_linkmaps(*, actions, debug_outputs_provider, bundle_name):
 
 def _bundle_dsym_files(
         *,
+        ctx,
         actions,
         bundle_extension = "",
         bundle_name,
@@ -124,7 +125,7 @@ def _bundle_dsym_files(
       outputs from the target.
     """
     bundle_name_with_extension = bundle_name + bundle_extension
-    dsym_bundle_name = bundle_name_with_extension + ".dSYM"
+    dsym_bundle_name = paths.join(ctx.attr.name + "_dsyms", bundle_name_with_extension + ".dSYM")
 
     output_binary = actions.declare_file(
         "%s/Contents/Resources/DWARF/%s" % (
@@ -232,6 +233,7 @@ def _debug_symbols_partial_impl(
         output_providers.append(debug_outputs_provider)
         if platform_prerequisites.objc_fragment.generate_dsym:
             dsym_files = _bundle_dsym_files(
+                ctx = ctx,
                 actions = actions,
                 bundle_name = bundle_name,
                 bundle_extension = bundle_extension,
