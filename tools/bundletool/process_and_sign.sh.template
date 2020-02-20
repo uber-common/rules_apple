@@ -56,11 +56,11 @@ pushd "$WORK_DIR" >/dev/null
 chmod -R u+w .
 # Fix the timestamps (depth first so the directory is update after the files in
 # it so updating files doesn't update the directory).
-TZ=UTC find . -depth -exec touch -h -t 198001010000 {} \+
 
 # We rely on `zip` instead of macOS `ditto` because this allows the action to
 # run both on Linux and macOS instances.
 #
+TZ=UTC find . -depth -exec touch -h -t 198001010000 {} \+
 # Avoid zip -r and feed the things in to zip in a deterministic order (not
 # directory order) to ensure a stable result.
 #
