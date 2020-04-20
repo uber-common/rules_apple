@@ -391,6 +391,12 @@ Avoid linking the dynamic framework, but still include it in the app. This is us
 to manually dlopen the framework at runtime.
 """,
         ),
+        "data": attr.label_list(
+            allow_files=True,
+            doc = """
+The list of files needed by this target at runtime.
+""",
+        ),
     },
     doc = """
 This rule encapsulates an already-built dynamic framework. It is defined by a list of files in
@@ -432,6 +438,12 @@ binary's transitive dependency graph are linked.
 Names of SDK frameworks to weakly link with. For instance, `MediaAccessibility`. In difference to
 regularly linked SDK frameworks, symbols from weakly linked frameworks do not cause an error if they
 are not present at runtime.
+""",
+        ),
+        "data": attr.label_list(
+            allow_files=True,
+            doc = """
+The list of files needed by this target at runtime.
 """,
         ),
         "deps": attr.label_list(
