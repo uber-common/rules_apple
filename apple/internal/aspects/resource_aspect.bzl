@@ -131,6 +131,10 @@ def _apple_resource_aspect_impl(target, ctx):
         process_args["bundle_id"] = ctx.rule.attr.bundle_id or None
         bundle_name = "{}.bundle".format(ctx.rule.attr.bundle_name or ctx.label.name)
 
+    elif ctx.rule.kind in ("apple_static_framework_import", "apple_dynamic_framework_import"):
+        collect_args["res_attrs"] = ["data"]
+        owner = str(ctx.label)
+
     # Collect all resource files related to this target.
     if collect_infoplists_args:
         infoplists = resources.collect(
