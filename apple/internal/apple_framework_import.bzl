@@ -756,6 +756,12 @@ The list of files under a .dSYM directory, that is the imported framework's dSYM
                 doc = """
 Avoid linking the dynamic framework, but still include it in the app. This is useful when you want
 to manually dlopen the framework at runtime.
+"""
+        ),
+        "data": attr.label_list(
+            allow_files=True,
+            doc = """
+The list of files needed by this target at runtime.
 """,
             ),
             "_cc_toolchain": attr.label(
@@ -824,10 +830,15 @@ Names of SDK frameworks to weakly link with. For instance, `MediaAccessibility`.
 regularly linked SDK frameworks, symbols from weakly linked frameworks do not cause an error if they
 are not present at runtime.
 """,
-            ),
-            "deps": attr.label_list(
-                aspects = [swift_clang_module_aspect],
-                doc = """
+        ),
+        "data": attr.label_list(
+            allow_files=True,
+            doc = """
+The list of files needed by this target at runtime.
+""",
+        ),
+        "deps": attr.label_list(
+            doc = """
 A list of targets that are dependencies of the target being built, which will provide headers and be
 linked into that target.
 """,
