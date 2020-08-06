@@ -413,6 +413,9 @@ def _resources_partial_impl(
                 "rule_label": rule_label,
             }
 
+            if field == "asset_catalogs":
+                processing_args["requested_features"] = ctx.features
+
             # Only pass the Swift module name if the type of resource to process
             # requires it.
             if requires_swift_module:

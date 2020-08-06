@@ -149,6 +149,7 @@ def _actool_args_for_special_file_types(
 
 def compile_asset_catalog(
         *,
+        requested_features,
         actions,
         asset_files,
         bundle_id,
@@ -192,6 +193,8 @@ def compile_asset_catalog(
         platform_prerequisites.minimum_os,
         "--compress-pngs",
     ]
+    if "actool.space_optimization" in requested_features:
+        args.extend(["--optimization", 'space'])
 
     if xcode_support.is_xcode_at_least_version(platform_prerequisites.xcode_version_config, "8"):
         if product_type:

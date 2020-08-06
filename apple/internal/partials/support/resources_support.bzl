@@ -133,6 +133,7 @@ def _compile_mappingmodels(
 
 def _asset_catalogs(
         *,
+        requested_features,
         actions,
         bundle_id,
         executables,
@@ -165,6 +166,7 @@ def _asset_catalogs(
     )
 
     resource_actions.compile_asset_catalog(
+        requested_features = requested_features,
         actions = actions,
         asset_files = files.to_list(),
         bundle_id = bundle_id,
