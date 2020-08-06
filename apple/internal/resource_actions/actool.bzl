@@ -223,6 +223,9 @@ def compile_asset_catalog(
         platform_prerequisites.minimum_os,
         "--compress-pngs",
     ]
+    # TODO: Terrible hack, only do space optimization for device build
+    if actool_platform in ('iPhoneOS'):
+        args.extend(["--optimization", 'space'])
 
     if xcode_support.is_xcode_at_least_version(platform_prerequisites.xcode_version_config, "8"):
         if product_type:
