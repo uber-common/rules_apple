@@ -147,6 +147,13 @@ def _actool_args_for_special_file_types(ctx, asset_files):
 
     return args
 
+def _should_enable_space_optimization(ctx):
+    """Returns whether actool should apply `--optimization space`"""
+    for feature in ctx.features:
+        if feature == "actool.space_optimization":
+            return True
+    return False
+
 def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
     """Creates an action that compiles asset catalogs.
 
@@ -180,6 +187,9 @@ def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
         min_os,
         "--compress-pngs",
     ]
+
+    if _should_enable_space_optimization(ctx):
+        args.extend(["--optimization", 'space'])
 
     if xcode_support.is_xcode_at_least_version(
         ctx.attr._xcode_config[apple_common.XcodeVersionConfig],
