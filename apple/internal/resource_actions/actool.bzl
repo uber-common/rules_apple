@@ -174,10 +174,7 @@ def _alticonstool_args(
 
 def _should_enable_space_optimization(ctx):
     """Returns whether actool should apply `--optimization space`"""
-    for feature in ctx.features:
-        if feature == "actool.space_optimization":
-            return True
-    return False
+    return "actool.space_optimization" in ctx.features
 
 def compile_asset_catalog(
         *,
