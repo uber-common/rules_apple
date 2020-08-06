@@ -149,10 +149,7 @@ def _actool_args_for_special_file_types(ctx, asset_files):
 
 def _should_enable_space_optimization(ctx):
     """Returns whether actool should apply `--optimization space`"""
-    for feature in ctx.features:
-        if feature == "actool.space_optimization":
-            return True
-    return False
+    return "actool.space_optimization" in ctx.features
 
 def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
     """Creates an action that compiles asset catalogs.
