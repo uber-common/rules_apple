@@ -19,6 +19,10 @@ load(
     "xcode_support",
 )
 load(
+    "@build_bazel_rules_apple//apple/internal:intermediates.bzl",
+    "intermediates",
+)
+load(
     "@build_bazel_rules_apple//apple/internal/utils:legacy_actions.bzl",
     "legacy_actions",
 )
@@ -151,7 +155,35 @@ def _should_enable_space_optimization(ctx):
     """Returns whether actool should apply `--optimization space`"""
     return "actool.space_optimization" in ctx.features
 
-def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
+def _alticonstool_args(
+        *,
+        actions,
+        alticons_files,
+        input_plist,
+        output_plist):
+    alticons_dirs = group_files_by_directory(
+        alticons_files,
+        ["alticon"],
+        attr = "alternate_icons",
+    ).keys()
+    args = actions.args()
+    args.add_all([
+        "--input",
+        input_plist,
+        "--output",
+        output_plist,
+    ])
+    args.add_all(alticons_dirs, before_each = "--alticon")
+    return [args]
+
+def compile_asset_catalog(
+        ctx,
+        alternate_icons,
+        asset_files,
+        output_dir,
+        output_plist,
+        resolved_alticonstool,
+    ):
     """Creates an action that compiles asset catalogs.
 
     This action populates a directory with compiled assets that must be merged
@@ -161,6 +193,7 @@ def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
 
     Args:
       ctx: The target's rule context.
+      alternate_icons: Alternate icons files, organized in .alticon directories.
       asset_files: An iterable of files in all asset catalogs that should be
           packaged as part of this catalog. This should include transitive
           dependencies (i.e., assets not just from the application target, but
@@ -169,6 +202,7 @@ def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
       output_dir: The directory where the compiled outputs should be placed.
       output_plist: The file reference for the output plist that should be merged
         into Info.plist. May be None if the output plist is not desired.
+      resolved_alticonstool: A struct referencing the resolved alticonstool tool.
     """
     platform = platform_support.platform(ctx)
     min_os = platform_support.minimum_os(ctx)
@@ -205,12 +239,24 @@ def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
         platform_support.families(ctx),
     ))
 
-    outputs = [output_dir]
+    alticons_outputs = []
+    actool_output_plist = None
+    actool_outputs = [output_dir]
     if output_plist:
-        outputs.append(output_plist)
+        if alternate_icons:
+            alticons_outputs = [output_plist]
+            actool_output_plist = intermediates.file(
+                ctx.actions,
+                ctx.label.name,
+                "{}.noalticon.plist".format(output_plist.basename),
+            )
+        else:
+            actool_output_plist = output_plist
+
+        actool_outputs.append(actool_output_plist)
         args.extend([
             "--output-partial-info-plist",
-            xctoolrunner.prefixed_path(output_plist.path),
+            xctoolrunner.prefixed_path(actool_output_plist.path),
         ])
 
     xcassets = group_files_by_directory(
@@ -224,9 +270,25 @@ def compile_asset_catalog(ctx, asset_files, output_dir, output_plist):
     legacy_actions.run(
         ctx,
         inputs = asset_files,
-        outputs = outputs,
+        outputs = actool_outputs,
         executable = ctx.executable._xctoolrunner,
         arguments = args,
         mnemonic = "AssetCatalogCompile",
         execution_requirements = {"no-sandbox": "1"},
     )
+
+    if alternate_icons:
+        legacy_actions.run(
+            ctx,
+            arguments = _alticonstool_args(
+                actions = ctx.actions,
+                input_plist = actool_output_plist,
+                output_plist = output_plist,
+                alticons_files = alternate_icons,
+            ),
+            executable = ctx.executable._alticonstool,
+            inputs = depset([actool_output_plist] + alternate_icons),
+            mnemonic = "AlternateIconsInsert",
+            outputs = alticons_outputs,
+            execution_requirements = {"no-sandbox": "1"},
+        )

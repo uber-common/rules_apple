@@ -137,6 +137,7 @@ AppleResourceInfo = provider(
     doc = "Provider that propagates buckets of resources that are differentiated by type.",
     # @unsorted-dict-items
     fields = {
+        "alternate_icons": "Alternate icons to be included in the App bundle.",
         "asset_catalogs": "Resources that need to be embedded into Assets.car.",
         "datamodels": "Datamodel files.",
         "infoplists": """Plist files to be merged and processed. Plist files that should not be

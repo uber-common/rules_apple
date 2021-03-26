@@ -129,15 +129,37 @@ def _asset_catalogs(ctx, parent_dir, files):
         paths.join(parent_dir or "", "xcassets"),
     )
 
+    # Separate alternate icons from regular assets
+    alternate_icons = []
+    asset_files = []
+    for f in files.to_list():
+        if ".alticon/" in f.path:
+            if f.extension != "png":
+                fail("Alternate icons must be .png files packaged in a .alticon folder.")
+
+            # Process icon PNGs like any other PNG
+            alticon_id = paths.basename(f.dirname)
+            png_file = intermediates.file(
+                ctx.actions,
+                ctx.label.name,
+                paths.join("alticons", alticon_id, f.basename),
+            )
+            resource_actions.copy_png(ctx, f, png_file)
+            alternate_icons.append(png_file)
+        else:
+            asset_files.append(f)
+
     resource_actions.compile_asset_catalog(
         ctx,
-        files.to_list(),
+        alternate_icons,
+        asset_files,
         assets_dir,
         assets_plist,
+        ctx.executable._alticonstool,
     )
 
     return struct(
-        files = [(processor.location.resource, parent_dir, depset(direct = [assets_dir]))],
+        files = [(processor.location.resource, parent_dir, depset(direct = [assets_dir] + alternate_icons))],
         infoplists = infoplists,
     )
 
