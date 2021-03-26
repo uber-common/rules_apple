@@ -81,6 +81,7 @@ def _describe_rule_type(
         deps_cfg = None,
         extra_linkopts = [],
         force_transition_whitelist = False,
+        has_alternate_icons = False,
         has_infoplist = True,
         has_launch_images = False,
         has_settings_bundle = False,
@@ -126,6 +127,7 @@ def _describe_rule_type(
             that use the Starlark linking API.
         extra_linkopts: Extra options to pass to the linker.
         force_transition_whitelist: Whether to force a dependency on the transition whitelist.
+        has_alternate_icons: Whether the rule supports alternate icons.
         has_infoplist: Whether the rule should place an Info.plist file at the root of the bundle.
         has_launch_images: Whether the rule supports launch images.
         has_settings_bundle: Whether the rule supports a settings bundle.
@@ -174,6 +176,7 @@ def _describe_rule_type(
         deps_cfg = deps_cfg,
         extra_linkopts = extra_linkopts,
         force_transition_whitelist = force_transition_whitelist,
+        has_alternate_icons = has_alternate_icons,
         has_infoplist = has_infoplist,
         has_launch_images = has_launch_images,
         has_settings_bundle = has_settings_bundle,
@@ -211,6 +214,7 @@ _RULE_TYPE_DESCRIPTORS = {
             archive_extension = ".ipa",
             bundle_extension = ".app",
             bundle_locations = _describe_bundle_locations(archive_relative = "Payload"),
+            has_alternate_icons = True,
             has_launch_images = True,
             has_settings_bundle = True,
             is_executable = True,

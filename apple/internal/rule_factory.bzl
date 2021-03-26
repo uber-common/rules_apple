@@ -94,6 +94,11 @@ def _is_test_product_type(product_type):
 # Private attributes on every rule that provide access to tools and other file dependencies.
 _COMMON_PRIVATE_TOOL_ATTRS = dicts.add(
     {
+        "_alticonstool": attr.label(
+            cfg = "host",
+            executable = True,
+            default = Label("@build_bazel_rules_apple//tools/alticonstool"),
+        ),
         "_bundletool": attr.label(
             cfg = "host",
             executable = True,
@@ -446,6 +451,16 @@ named `*.{app_icon_parent_extension}/*.{app_icon_extension}` and there may be on
                     app_icon_extension = rule_descriptor.app_icon_extension,
                     app_icon_parent_extension = rule_descriptor.app_icon_parent_extension,
                 ),
+            ),
+        })
+
+    if rule_descriptor.has_alternate_icons:
+        attrs.append({
+            "alternate_icons": attr.label_list(
+                allow_files = True,
+                doc = """
+Files that comprise the alternate app icons for the application. Each file must have a containing directory
+named after the alternate icon identifier.""",
             ),
         })
 

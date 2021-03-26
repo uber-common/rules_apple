@@ -76,6 +76,7 @@ load(
 def _ios_application_impl(ctx):
     """Experimental implementation of ios_application."""
     top_level_attrs = [
+        "alternate_icons",
         "app_icons",
         "launch_images",
         "launch_storyboard",
