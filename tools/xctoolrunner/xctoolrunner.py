@@ -28,6 +28,8 @@ Subcommands:
 
   ibtool [<args>...]
 
+  intentbuilderc [<args>....]
+
   mapc [<args>...]
 
   momc [<args>...]
@@ -51,6 +53,7 @@ from build_bazel_rules_apple.tools.wrapper_common import execute
 # apple/internal/utils/xctoolrunner.bzl
 _PATH_PREFIX = "[ABSOLUTE]"
 _PATH_PREFIX_LEN = len(_PATH_PREFIX)
+_HEADER_SUFFIX = ".h"
 
 
 def _apply_realpath(argv):
@@ -68,6 +71,47 @@ def _apply_realpath(argv):
       arg = arg[_PATH_PREFIX_LEN:]
       argv[i] = os.path.realpath(arg)
 
+def _execute_and_filter_with_retry(xcrunargs, filtering):
+  # Note: `actool`/`ibtool` is problematic on all Xcode 12 builds including to 12.1. 25%
+  # of the time, it fails with the error:
+  # "failed to open # liblaunch_sim.dylib"
+  #
+  # This workaround adds a retry it works due to logic in `actool`:
+  # The first time `actool` runs, it spawns a dependent service as the current
+  # user. After a failure, `actool` spawns it in a way that subsequent
+  # invocations will not have the error. It only needs 1 retry.
+  return_code, stdout, stderr = execute.execute_and_filter_output(
+      xcrunargs,
+      trim_paths=True,
+      filtering=filtering,
+      print_output=False)
+
+  # If there's a retry, don't print the first failing output.
+  if return_code == 0:
+    if stdout:
+      sys.stdout.write("%s" % stdout)
+    if stderr:
+      sys.stderr.write("%s" % stderr)
+    return return_code
+
+  return_code, _, _ = execute.execute_and_filter_output(
+      xcrunargs,
+      trim_paths=True,
+      filtering=filtering,
+      print_output=True)
+  return return_code
+
+def _ensure_clean_path(path):
+  """Ensure a directory is exists and is empty."""
+  if os.path.exists(path):
+    os.removedirs(path)
+  os.makedirs(path)
+
+def _listdir_full(path):
+  """List a directory but output the full path to the files instead of only the
+  file names."""
+  for f in os.listdir(path):
+    yield os.path.join(path, f)
 
 def ibtool_filtering(tool_exit_status, raw_stdout, raw_stderr):
   """Filter messages from ibtool.
@@ -289,6 +333,62 @@ def swift_stdlib_tool(args, toolargs):
   shutil.rmtree(tmpdir)
   return result
 
+def intentbuilderc(args, toolargs):
+  """Assemble the call to "xcrun intentbuilderc"."""
+  xcrunargs = ["xcrun", "intentbuilderc"]
+  _apply_realpath(toolargs)
+  is_swift = args.language == "Swift"
+
+  output_path = None
+  objc_output_srcs = None
+  objc_output_hdrs = None
+
+  # If the language is Swift, create a temporary directory for codegen output.
+  # If the language is Objective-C, ensure the module name directory and headers
+  # are created and empty (clean).
+  if is_swift:
+    output_path = "{}.out.tmp".format(args.swift_output_src)
+  else:
+    output_path = args.objc_output_srcs
+    _ensure_clean_path(args.objc_output_hdrs)
+
+  _ensure_clean_path(output_path)
+  output_path = os.path.realpath(output_path)
+
+  toolargs += [
+    "-language",
+    args.language,
+    "-output",
+    output_path,
+  ]
+
+  xcrunargs += toolargs
+
+  return_code, _, _ = execute.execute_and_filter_output(
+      xcrunargs,
+      print_output=True)
+
+  if return_code != 0:
+    return return_code
+
+  # If the language is Swift, concatenate all the output files into one.
+  # If the language is Objective-C, put the headers into the pre-declared
+  # headers directory. Because the .m files reference headers via quotes, copy
+  # them instead of moving them and doing some -iquote fu.
+  if is_swift:
+    with open(args.swift_output_src, "w") as output_src:
+      for src in _listdir_full(output_path):
+        with open(src) as intput_src:
+          shutil.copyfileobj(intput_src, output_src)
+  else:
+    with open(args.objc_public_header, "w") as public_header_f:
+      for source_file in _listdir_full(output_path):
+        if source_file.endswith(_HEADER_SUFFIX):
+          out_hdr = os.path.join(args.objc_output_hdrs, os.path.basename(source_file))
+          shutil.copy(source_file, out_hdr)
+          public_header_f.write("#import \"{}\"\n".format(os.path.relpath(out_hdr)))
+
+  return return_code
 
 def momc(_, toolargs):
   """Assemble the call to "xcrun momc"."""
@@ -329,6 +429,15 @@ def main(argv):
   # COREMLC Argument Parser
   mapc_parser = subparsers.add_parser("coremlc")
   mapc_parser.set_defaults(func=coremlc)
+
+  # INTENTBUILDERC Argument Parser
+  intentbuilderc_parser = subparsers.add_parser("intentbuilderc")
+  intentbuilderc_parser.set_defaults(func=intentbuilderc)
+  intentbuilderc_parser.add_argument("-language")
+  intentbuilderc_parser.add_argument("-objc_output_srcs")
+  intentbuilderc_parser.add_argument("-objc_output_hdrs")
+  intentbuilderc_parser.add_argument("-objc_public_header")
+  intentbuilderc_parser.add_argument("-swift_output_src")
 
   # SWIFT-STDLIB-TOOL Argument Parser
   swiftlib_parser = subparsers.add_parser("swift-stdlib-tool")
