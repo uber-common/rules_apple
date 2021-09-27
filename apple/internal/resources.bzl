@@ -440,7 +440,8 @@ def _process_bucketized_data(
         processing_owner = None,
         product_type,
         rule_label,
-        unowned_resources = []):
+        unowned_resources = [],
+        requested_features):
     """Registers actions for cacheable resource types, given bucketized groupings of data.
 
     This method performs the same actions as bucketize_data, and further iterates through a subset
@@ -487,6 +488,7 @@ def _process_bucketized_data(
                 "platform_prerequisites": platform_prerequisites,
                 "product_type": product_type,
                 "rule_label": rule_label,
+                "requested_features": requested_features,
             }
 
             # Only pass the Swift module name if the resource to process requires it.
