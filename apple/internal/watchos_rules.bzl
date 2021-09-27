@@ -515,6 +515,7 @@ def _watchos_dynamic_framework_impl(ctx):
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
             version_keys_required = False,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -727,6 +728,7 @@ def _watchos_application_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -984,6 +986,7 @@ def _watchos_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1161,6 +1164,7 @@ def _watchos_static_framework_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = None,
+            requested_features = ctx.features,
         ))
 
     processor_result = processor.process(

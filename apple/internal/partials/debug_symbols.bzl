@@ -195,8 +195,8 @@ def _bundle_dsym_files(
       should be returned as additional outputs from the target, and the second argument is a tree
       artifact representation of a .dSYM bundle with the binaries lipoed together as one binary.
     """
-    bundle_name_with_extension = bundle_name + bundle_extension
-    dsym_bundle_name = paths.join(rule_label.name + "_dsyms", bundle_name_with_extension + ".dSYM")
+    dsym_bundle_name_with_extension = debug_output_filename + bundle_extension
+    dsym_bundle_name = paths.join(rule_label.name + "_dsyms", dsym_bundle_name_with_extension + ".dSYM")
 
     output_files = []
     dsym_bundle_dir = None

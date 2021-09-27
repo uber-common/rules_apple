@@ -268,6 +268,7 @@ def _tvos_application_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.settings_bundle_partial(
             actions = actions,
@@ -549,6 +550,7 @@ def _tvos_dynamic_framework_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             version = ctx.attr.version,
             version_keys_required = False,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -772,6 +774,7 @@ def _tvos_framework_impl(ctx):
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
             version_keys_required = False,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -976,6 +979,7 @@ def _tvos_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1142,6 +1146,7 @@ def _tvos_static_framework_impl(ctx):
             rule_descriptor = rule_descriptor,
             rule_label = label,
             version = None,
+            requested_features = ctx.features,
         ))
 
     processor_result = processor.process(
