@@ -250,8 +250,8 @@ def _get_simulator_test_environment(ctx, runner):
 
     # Combine all the environments with the DYLD_INSERT_LIBRARIES values merged together.
     return dicts.add(
-        command_line_test_env,
         rule_test_env,
         runner_test_env,
         test_env_dyld_insert_pairs,
+        command_line_test_env,
     )
