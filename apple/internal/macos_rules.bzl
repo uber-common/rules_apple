@@ -206,6 +206,7 @@ def _macos_application_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -410,6 +411,7 @@ def _macos_bundle_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -576,6 +578,7 @@ def _macos_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -758,6 +761,7 @@ def _macos_quick_look_plugin_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -926,6 +930,8 @@ def _macos_kernel_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            top_level_attrs = ["resources"],
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1092,6 +1098,7 @@ def _macos_spotlight_importer_impl(ctx):
             rule_label = label,
             top_level_infoplists = top_level_infoplists,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1257,6 +1264,7 @@ def _macos_xpc_service_impl(ctx):
             rule_label = label,
             top_level_infoplists = top_level_infoplists,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,

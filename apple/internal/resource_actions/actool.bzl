@@ -172,9 +172,9 @@ def _alticonstool_args(
     args.add_all(alticons_dirs, before_each = "--alticon")
     return [args]
 
-def _should_enable_space_optimization(ctx):
+def _should_enable_space_optimization(requested_features):
     """Returns whether actool should apply `--optimization space`"""
-    return "actool.space_optimization" in ctx.features
+    return "actool.space_optimization" in requested_features
 
 def compile_asset_catalog(
         *,
@@ -188,7 +188,8 @@ def compile_asset_catalog(
         product_type,
         resolved_alticonstool,
         resolved_xctoolrunner,
-        rule_label):
+        rule_label,
+        requested_features):
     """Creates an action that compiles asset catalogs.
 
     This action populates a directory with compiled assets that must be merged
@@ -227,7 +228,7 @@ def compile_asset_catalog(
         platform_prerequisites.minimum_os,
         "--compress-pngs",
     ]
-    if _should_enable_space_optimization(ctx):
+    if _should_enable_space_optimization(requested_features):
         args.extend(["--optimization", 'space'])
 
     if xcode_support.is_xcode_at_least_version(platform_prerequisites.xcode_version_config, "8"):

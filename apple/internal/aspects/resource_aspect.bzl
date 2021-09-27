@@ -96,6 +96,7 @@ def _apple_resource_aspect_impl(target, ctx):
         "bundle_id": None,
         "product_type": None,
         "rule_label": ctx.label,
+        "requested_features": ctx.features,
     }
     collect_infoplists_args = {}
     collect_args = {}

@@ -389,6 +389,7 @@ def _apple_test_bundle_impl(ctx, extra_providers = []):
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
             version_keys_required = False,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
