@@ -201,8 +201,8 @@ def _bundle_dsym_files(
       A list of files that comprise the .dSYM bundle, which should be returned as additional
       outputs from the target.
     """
-    bundle_name_with_extension = bundle_name + bundle_extension
-    dsym_bundle_name = paths.join(rule_label.name + "_dsyms", bundle_name_with_extension + ".dSYM")
+    dsym_bundle_name_with_extension = debug_output_filename + bundle_extension
+    dsym_bundle_name = paths.join(rule_label.name + "_dsyms", dsym_bundle_name_with_extension + ".dSYM")
 
     outputs = []
 
