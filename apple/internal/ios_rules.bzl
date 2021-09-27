@@ -296,6 +296,7 @@ def _ios_application_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.settings_bundle_partial(
             actions = actions,
@@ -589,6 +590,7 @@ def _ios_app_clip_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -850,6 +852,7 @@ def _ios_framework_impl(ctx):
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
             version_keys_required = False,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1068,6 +1071,7 @@ def _ios_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1322,6 +1326,7 @@ def _ios_dynamic_framework_impl(ctx):
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
             version_keys_required = False,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1478,6 +1483,7 @@ def _ios_static_framework_impl(ctx):
             rule_descriptor = rule_descriptor,
             rule_label = label,
             version = None,
+            requested_features = ctx.features,
         ))
 
     processor_result = processor.process(
@@ -1632,6 +1638,7 @@ def _ios_imessage_application_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -1842,6 +1849,7 @@ def _ios_imessage_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
             actions = actions,
@@ -2020,6 +2028,7 @@ def _ios_sticker_pack_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
+            requested_features = ctx.features,
         ),
         partials.messages_stub_partial(
             actions = actions,
