@@ -39,7 +39,8 @@ def _apple_bundle_info_partial_impl(
         output_discriminator,
         platform_prerequisites,
         predeclared_outputs,
-        product_type):
+        product_type,
+        rule_descriptor):
     """Implementation for the AppleBundleInfo processing partial."""
 
     archive = outputs.archive(
@@ -48,8 +49,15 @@ def _apple_bundle_info_partial_impl(
         bundle_extension = bundle_extension,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label_name,
+
     )
+
+
     archive_root = outputs.root_path_from_archive(archive = archive)
+
+
 
     binary = outputs.binary(
         actions = actions,
@@ -101,7 +109,8 @@ def apple_bundle_info_partial(
         output_discriminator = None,
         platform_prerequisites,
         predeclared_outputs,
-        product_type):
+        product_type,
+        rule_descriptor):
     """Constructor for the AppleBundleInfo processing partial.
 
     This partial propagates the AppleBundleInfo provider for this target.
@@ -136,4 +145,5 @@ def apple_bundle_info_partial(
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
         product_type = product_type,
+        rule_descriptor = rule_descriptor,
     )
