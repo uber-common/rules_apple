@@ -444,6 +444,7 @@ def _watchos_dynamic_framework_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -673,6 +674,8 @@ def _watchos_application_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -687,6 +690,7 @@ def _watchos_application_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -899,6 +903,8 @@ def _watchos_extension_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     bundle_verification_targets = [struct(target = ext) for ext in ctx.attr.extensions]
@@ -916,6 +922,7 @@ def _watchos_extension_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -1101,6 +1108,7 @@ def _watchos_static_framework_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
