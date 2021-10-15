@@ -27,7 +27,9 @@ def _register_simulator_executable(
         output,
         platform_prerequisites,
         predeclared_outputs,
-        runner_template):
+        runner_template,
+        rule_descriptor,
+        label_name):
     """Registers an action that runs the bundled app in the iOS simulator.
 
     Args:
@@ -49,6 +51,8 @@ def _register_simulator_executable(
         bundle_extension = bundle_extension,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label_name
     )
 
     actions.expand_template(
@@ -72,7 +76,9 @@ def _register_macos_executable(
         output,
         platform_prerequisites,
         predeclared_outputs,
-        runner_template):
+        runner_template,
+        rule_descriptor,
+        label_name):
     """Registers an action that runs the bundled macOS app.
 
     Args:
@@ -91,6 +97,8 @@ def _register_macos_executable(
         bundle_extension = bundle_extension,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label_name
     )
 
     actions.expand_template(
