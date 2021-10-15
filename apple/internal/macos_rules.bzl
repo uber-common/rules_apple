@@ -164,6 +164,7 @@ def _macos_application_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -307,6 +308,8 @@ def _macos_application_impl(ctx):
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
         runner_template = ctx.file._runner_template,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     archive = outputs.archive(
@@ -315,6 +318,8 @@ def _macos_application_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     return [
@@ -401,6 +406,8 @@ def _macos_bundle_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -415,6 +422,7 @@ def _macos_bundle_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -597,6 +605,8 @@ def _macos_extension_impl(ctx):
         bundle_extension = bundle_extension,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -611,6 +621,7 @@ def _macos_extension_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -812,6 +823,8 @@ def _macos_quick_look_plugin_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -826,6 +839,7 @@ def _macos_quick_look_plugin_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -1013,6 +1027,8 @@ def _macos_kernel_extension_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -1027,6 +1043,7 @@ def _macos_kernel_extension_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -1211,6 +1228,8 @@ def _macos_spotlight_importer_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -1225,6 +1244,7 @@ def _macos_spotlight_importer_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -1407,6 +1427,8 @@ def _macos_xpc_service_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -1421,6 +1443,7 @@ def _macos_xpc_service_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,

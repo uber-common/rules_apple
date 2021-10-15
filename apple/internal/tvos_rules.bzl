@@ -179,6 +179,7 @@ def _tvos_application_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -325,6 +326,8 @@ def _tvos_application_impl(ctx):
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
         runner_template = ctx.file._runner_template,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     archive = outputs.archive(
@@ -333,6 +336,8 @@ def _tvos_application_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     return [
@@ -433,6 +438,8 @@ def _tvos_dynamic_framework_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -446,6 +453,7 @@ def _tvos_dynamic_framework_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -640,6 +648,8 @@ def _tvos_framework_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -653,6 +663,7 @@ def _tvos_framework_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -850,6 +861,8 @@ def _tvos_extension_impl(ctx):
         bundle_name = bundle_name,
         platform_prerequisites = platform_prerequisites,
         predeclared_outputs = predeclared_outputs,
+        rule_descriptor = rule_descriptor,
+        label_name = label.name,
     )
 
     processor_partials = [
@@ -864,6 +877,7 @@ def _tvos_extension_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
@@ -1035,6 +1049,7 @@ def _tvos_static_framework_impl(ctx):
             platform_prerequisites = platform_prerequisites,
             predeclared_outputs = predeclared_outputs,
             product_type = rule_descriptor.product_type,
+            rule_descriptor = rule_descriptor,
         ),
         partials.binary_partial(
             actions = actions,
