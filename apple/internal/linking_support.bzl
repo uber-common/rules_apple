@@ -89,7 +89,7 @@ def _register_linking_action(ctx, extra_linkopts = []):
     rpaths = rule_descriptor.rpaths
     linkopts = []
     if rpaths:
-        linkopts.extend(collections.before_each("-rpath", rpaths))
+        linkopts.extend(["-Wl,-rpath,{}".format(rpath) for rpath in rpaths])
 
     linkopts.extend(rule_descriptor.extra_linkopts + extra_linkopts)
 
