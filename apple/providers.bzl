@@ -521,3 +521,16 @@ require that a dependency is a watchOS application extension should use this
 provider to describe that requirement.
 """,
 )
+
+AppleFrameworkImportInfo = provider(
+    doc = "Provider that propagates information about framework import targets.",
+    fields = {
+        "framework_imports": """
+Depset of Files that represent framework imports that need to be bundled in the top level
+application bundle under the Frameworks directory.
+""",
+        "build_archs": """
+Depset of strings that represent binary architectures reported from the current build.
+""",
+    },
+)

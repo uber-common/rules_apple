@@ -15,7 +15,7 @@
 """Implementation of the aspect that propagates framework import files."""
 
 load(
-    "@build_bazel_rules_apple//apple/internal:apple_framework_import.bzl",
+    "//apple:providers.bzl",
     "AppleFrameworkImportInfo",
 )
 
