@@ -947,7 +947,6 @@ def _macos_kernel_extension_impl(ctx):
             top_level_infoplists = top_level_infoplists,
             top_level_resources = top_level_resources,
             version = ctx.attr.version,
-            top_level_attrs = ["resources"],
             requested_features = ctx.features,
         ),
         partials.swift_dylibs_partial(
