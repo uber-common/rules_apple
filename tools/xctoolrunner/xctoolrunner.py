@@ -257,13 +257,22 @@ def actool(_, toolargs):
                "--errors",
                "--warnings",
                "--notices",
-               "--compress-pngs",
                "--output-format",
                "human-readable-text"]
 
   _apply_realpath(toolargs)
 
   xcrunargs += toolargs
+
+  # The argument coming after "--compile" is the output directory. "actool"
+  # expects an directory to exist at that path. Create an empty directory there
+  # if one doesn't exist yet.
+  for idx, arg in enumerate(toolargs):
+    if arg == "--compile":
+      output_dir = toolargs[idx + 1]
+      if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+      break
 
   # If we are running into problems figuring out "actool" issues, there are a
   # couple of environment variables that may help. Both of the following must be
@@ -275,11 +284,34 @@ def actool(_, toolargs):
   # helps.
   # Yes, IBTOOL appears to be correct here due to "actool" and "ibtool" being
   # based on the same codebase.
+  #
+  # Note: `actool` is problematic on all Xcode 12 builds including to 12.1. 25%
+  # of the time, it fails with the error:
+  # "failed to open # liblaunch_sim.dylib"
+  #
+  # This workaround adds a retry it works due to logic in `actool`:
+  # The first time `actool` runs, it spawns a dependent service as the current
+  # user. After a failure, `actool` spawns it in a way that subsequent
+  # invocations will not have the error. It only needs 1 retry.
+  return_code, stdout, stderr = execute.execute_and_filter_output(
+    xcrunargs,
+    trim_paths=True,
+    filtering=actool_filtering,
+    print_output=False)
+
+  # If there's a retry, don't print the first failing output.
+  if return_code == 0:
+    if stdout:
+      sys.stdout.write("%s" % stdout)
+    if stderr:
+      sys.stderr.write("%s" % stderr)
+    return return_code
+
   return_code, _, _ = execute.execute_and_filter_output(
-      xcrunargs,
-      trim_paths=True,
-      filtering=actool_filtering,
-      print_output=True)
+    xcrunargs,
+    trim_paths=True,
+    filtering=actool_filtering,
+    print_output=True)
   return return_code
 
 
