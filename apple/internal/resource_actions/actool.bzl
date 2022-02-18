@@ -121,14 +121,23 @@ def _actool_args_for_special_file_types(
             [appicon_extension],
             attr = "app_icons",
         ).keys()
-        if len(icon_dirs) != 1:
-            formatted_dirs = "[\n  %s\n]" % ",\n  ".join(icon_dirs)
+
+        alternate_icon_dirs = [d for d in icon_dirs if "_AltIcon" in d]
+        main_icon_dirs = [d for d in icon_dirs if "_AltIcon" not in d]
+
+        if len(main_icon_dirs) != 1:
+            formatted_dirs = "[\n  %s\n]" % ",\n  ".join(main_icon_dirs)
             fail("The asset catalogs should contain exactly one directory named " +
                  "*.%s among its asset catalogs, " % appicon_extension +
                  "but found the following: " + formatted_dirs, "app_icons")
 
         app_icon_name = paths.split_extension(paths.basename(icon_dirs[0]))[0]
         args += ["--app-icon", app_icon_name]
+
+        if len(alternate_icon_dirs) >= 1:
+          args += ["--include-all-app-icons"]
+          alternate_icon_name = paths.split_extension(paths.basename(alternate_icon_dirs[0]))[0]
+          args += ["--alternate-app-icon", alternate_icon_name]
 
     # Add arguments for launch images, if there are any.
     launch_image_files = [f for f in asset_files if ".launchimage/" in f.path]
