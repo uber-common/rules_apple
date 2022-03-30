@@ -73,26 +73,32 @@ def _execute_and_filter_with_retry(xcrunargs, filtering):
   # The first time `actool` runs, it spawns a dependent service as the current
   # user. After a failure, `actool` spawns it in a way that subsequent
   # invocations will not have the error. It only needs 1 retry.
-  return_code, stdout, stderr = execute.execute_and_filter_output(
-      xcrunargs,
-      trim_paths=True,
-      filtering=filtering,
-      print_output=False)
 
-  # If there's a retry, don't print the first failing output.
-  if return_code == 0:
-    if stdout:
-      sys.stdout.write("%s" % stdout)
-    if stderr:
-      sys.stderr.write("%s" % stderr)
-    return return_code
+  # we are experiencing random ibtool failures on Xcode 13 + MacOS 12
+  # it fails with the following error:
+  # Failed to attach to IBAgent-iOS with error: Error Domain=com.apple.InterfaceBuilder Code=-1 "Encountered an error communicating with IBAgent-iOS.
+  # No lead on how or why this is happening so far, bump up retry as mitigation
+  num_attempts = 5
+  for x in range(num_attempts):
+    return_code, stdout, stderr = execute.execute_and_filter_output(
+        xcrunargs,
+        trim_paths=True,
+        filtering=filtering,
+        print_output=False)
+
+    # If there's retry left, don't print previous failing output.
+    if return_code == 0 or x == num_attempts - 1:
+      if stdout:
+        sys.stdout.write("%s" % stdout)
+      if stderr:
+        sys.stderr.write("%s" % stderr)
+      return return_code
 
   return_code, _, _ = execute.execute_and_filter_output(
       xcrunargs,
       trim_paths=True,
       filtering=filtering,
       print_output=True)
-  return return_code
 
 def _ensure_clean_path(path):
   """Ensure a directory is exists and is empty."""
