@@ -203,6 +203,7 @@ def _macos_application_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             bundle_embedded_bundles = True,
@@ -459,6 +460,7 @@ def _macos_bundle_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             platform_prerequisites = platform_prerequisites,
@@ -657,6 +659,7 @@ def _macos_extension_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             platform_prerequisites = platform_prerequisites,
@@ -874,6 +877,7 @@ def _macos_quick_look_plugin_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             frameworks = [archive],
@@ -1073,6 +1077,7 @@ def _macos_kernel_extension_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             platform_prerequisites = platform_prerequisites,
@@ -1271,6 +1276,7 @@ def _macos_spotlight_importer_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             platform_prerequisites = platform_prerequisites,
@@ -1467,6 +1473,7 @@ def _macos_xpc_service_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             platform_prerequisites = platform_prerequisites,
@@ -1593,6 +1600,7 @@ def _macos_command_line_application_impl(ctx):
         executable_name = executable_name,
         linkmaps = debug_outputs.linkmaps,
         platform_prerequisites = platform_prerequisites,
+        rule_label = label,
     )
 
     processor_result = processor.process(
@@ -1707,6 +1715,7 @@ def _macos_dylib_impl(ctx):
         executable_name = executable_name,
         linkmaps = debug_outputs.linkmaps,
         platform_prerequisites = platform_prerequisites,
+        rule_label = label,
     )
 
     processor_result = processor.process(

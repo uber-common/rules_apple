@@ -237,6 +237,7 @@ def _watchos_framework_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             frameworks = [archive_for_embedding],
@@ -476,6 +477,7 @@ def _watchos_dynamic_framework_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             frameworks = [archive_for_embedding],
@@ -708,6 +710,7 @@ def _watchos_application_impl(ctx):
             dsym_info_plist_template = apple_mac_toolchain_info.dsym_info_plist_template,
             executable_name = executable_name,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             bundle_embedded_bundles = True,
@@ -950,6 +953,7 @@ def _watchos_extension_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             bundle_embedded_bundles = True,

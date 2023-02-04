@@ -235,6 +235,7 @@ def _tvos_application_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             bundle_embedded_bundles = True,
@@ -518,6 +519,7 @@ def _tvos_dynamic_framework_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             frameworks = [archive],
@@ -744,6 +746,7 @@ def _tvos_framework_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             frameworks = [archive],
@@ -965,6 +968,7 @@ def _tvos_extension_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             embeddable_targets = ctx.attr.frameworks,

@@ -31,6 +31,10 @@ load(
     "@bazel_skylib//lib:partial.bzl",
     "partial",
 )
+load(
+    "@bazel_skylib//lib:paths.bzl",
+    "paths",
+)
 
 _AppleDebugInfo = provider(
     doc = "Private provider to propagate transitive debug symbol information.",
@@ -267,7 +271,8 @@ def _debug_symbols_partial_impl(
         dsym_info_plist_template,
         executable_name,
         linkmaps = {},
-        platform_prerequisites):
+        platform_prerequisites,
+        rule_label):
     """Implementation for the debug symbols processing partial."""
     deps_dsym_bundle_providers = [
         x[AppleDsymBundleInfo]
@@ -382,7 +387,8 @@ def debug_symbols_partial(
         dsym_info_plist_template,
         executable_name,
         linkmaps = {},
-        platform_prerequisites):
+        platform_prerequisites,
+        rule_label):
     """Constructor for the debug symbols processing partial.
 
     This partial collects all of the transitive debug files information. The output of this partial
@@ -422,4 +428,5 @@ def debug_symbols_partial(
         executable_name = executable_name,
         linkmaps = linkmaps,
         platform_prerequisites = platform_prerequisites,
+        rule_label = rule_label,
     )
