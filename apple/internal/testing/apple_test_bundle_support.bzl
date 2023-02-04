@@ -397,6 +397,7 @@ def _apple_test_bundle_impl(ctx):
             executable_name = executable_name,
             linkmaps = debug_outputs.linkmaps,
             platform_prerequisites = platform_prerequisites,
+            rule_label = label,
         ),
         partials.embedded_bundles_partial(
             bundle_embedded_bundles = True,
