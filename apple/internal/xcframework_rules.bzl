@@ -613,6 +613,7 @@ def _apple_xcframework_impl(ctx):
                 executable_name = executable_name,
                 linkmaps = link_output.linkmaps,
                 platform_prerequisites = platform_prerequisites,
+                rule_label = label,
             ),
             partials.resources_partial(
                 actions = actions,
