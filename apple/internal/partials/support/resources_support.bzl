@@ -464,6 +464,7 @@ def _metals(
         input_files = input_files,
         output_file = metallib_file,
         platform_prerequisites = platform_prerequisites,
+        target_name = rule_label.name,
     )
 
     return struct(
