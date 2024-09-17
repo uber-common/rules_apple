@@ -22,6 +22,10 @@ load(
     "@build_bazel_apple_support//lib:apple_support.bzl",
     "apple_support",
 )
+load(
+    "@build_bazel_rules_apple//apple/internal:intermediates.bzl",
+    "intermediates",
+)
 
 def _metal_apple_target_triple(platform_prerequisites):
     """Returns a Metal target triple string for an Apple platform.
@@ -46,7 +50,7 @@ def _metal_apple_target_triple(platform_prerequisites):
         version = target_os_version,
     )
 
-def compile_metals(*, actions, input_files, output_file, platform_prerequisites, **_kwargs):
+def compile_metals(*, actions, input_files, output_file, platform_prerequisites, target_name, **_kwargs):
     """Creates actions that compile .metal files into a single .metallib file.
 
     Args:
@@ -54,6 +58,8 @@ def compile_metals(*, actions, input_files, output_file, platform_prerequisites,
         platform_prerequisites: Struct containing information on the platform being targeted.
         input_files: The input metal files.
         output_file: The output metallib file.
+        target_name: The owning target name used to differentiate between different target
+            intermediate files.
         **_kwargs: Ignored
     """
     air_files = []
@@ -74,8 +80,11 @@ def compile_metals(*, actions, input_files, output_file, platform_prerequisites,
 
     # Compile each .metal file into a single .air file
     for input_metal in metal_files:
-        air_file = actions.declare_file(
-            paths.replace_extension(input_metal.basename, ".air"),
+        air_file = intermediates.file(
+            actions = actions,
+            file_name = paths.replace_extension(input_metal.basename, ".air"),
+            output_discriminator = None,
+            target_name = target_name,
         )
         air_files.append(air_file)
 
